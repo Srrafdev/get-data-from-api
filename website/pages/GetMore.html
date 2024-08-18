@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get More</title>
+</head>
+<body>
+   <div>
+		<img src="{{.Image}}" alt="{{.Name}}" />
+		<h1>Artist</h1>
+		<p><strong>Name:</strong> {{.Name}}</p>
+		<p><strong>Members:</strong> {{range .Members}}{{.}}, {{end}}</p>
+		<p><strong>Creation Date:</strong> {{.CreationDate}}</p>
+		<p><strong>First Album:</strong> {{.FirstAlbum}}</p>
+
+		<h1>Location</h1>
+		<ul>
+			{{range .Locations}}
+			<li>{{.}}</li>
+			{{end}}
+		</ul>
+		<h1>Date</h1>
+		<ul>
+			{{range .Dates}}
+			<li>{{.}}</li>
+			{{end}}
+		</ul>
+
+		<h1>Relation</h1>
+		<p><strong>Dates Locations:</strong></p>
+		<ul>
+			{{range $key, $value := .DatesLocation}}
+			<li><strong>{{ $key }}:</strong>
+				<ul>
+					{{range $value}}
+					<li>{{.}}</li>
+					{{end}}
+				</ul>
+			</li>
+			<br>
+			{{end}}
+		</ul>
+	</div>
+</body>
+</html>
