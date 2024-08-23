@@ -2,6 +2,7 @@ package box
 
 import (
 	box "box/tracker"
+	"fmt"
 	"net/http"
 	"text/template"
 )
@@ -28,16 +29,19 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	var api box.Api
 
 	box.SaveURL(&api)
+	fmt.Println(api)
+	
+	var tempData box.TempStruct
+	box.Decode(&tempData, api.Locations)
+	
+	dataArtist = tempData.Index
 	box.Decode(&dataArtist, api.Artists)
 
-	var filter []box.Data_Execute
-	for _, artist := range dataArtist {
-		if artist.CreationDate > 2000 && artist.CreationDate < 2010 {
-			filter = append(filter, artist)
-		}
-	}
+	r.ParseForm()
+	DT := box.FilterLocaton(dataArtist,r.FormValue("loca"))
 
-	if err := tmp.Execute(w, filter); err != nil {
+	if err := tmp.Execute(w, DT); err != nil {
+		fmt.Println(err)
 		http.Error(w, "Internal Server 500", http.StatusInternalServerError)
 		return
 	}

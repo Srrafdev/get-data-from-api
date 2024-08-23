@@ -39,6 +39,18 @@
         children[9].style.left=value+'%';children[13].style.left=value+'%';
         children[13].childNodes[1].innerHTML=this.value;" />
       </div>
+      
+      <form action="/" method="post">
+      <select name="loca" id="loca">
+        {{range .}}
+          {{range .Locations}}
+           <option value="{{.}}">{{.}}</option>
+          {{end}}
+        {{end}}
+      </select>
+      <button type="submit" name="submit">Search</button>
+    </form>
+
     {{range .}}
     <form action="/GetMore" method="get">
         <img src="{{.Image}}" alt="Image" width="260" height="260">

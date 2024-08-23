@@ -2,18 +2,15 @@ package main
 
 import (
 	box "box/hundler"
-	"embed"
 	"fmt"
 	"net/http"
 )
 
-var cssFiles embed.FS
-
-func main() {										
+func main() {
 	//http.Handle("/styles.css", http.FileServer(http.Dir("./website/style/")))
-    //http.Handle("/style.css/", http.StripPrefix("/style/", http.FileServer(http.Dir("website/style"))))
+	//http.Handle("/style.css/", http.StripPrefix("/style/", http.FileServer(http.Dir("website/style"))))
 	cssDir := http.FileServer(http.Dir("./website/style"))
-    http.Handle("/style/", http.StripPrefix("/style/", cssDir))
+	http.Handle("/style/", http.StripPrefix("/style/", cssDir))
 	//http.Handle("/styles.css", http.FileServer(http.FS(cssFiles)))
 
 	http.HandleFunc("/", box.Home)
