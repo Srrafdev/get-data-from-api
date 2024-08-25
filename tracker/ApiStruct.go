@@ -19,5 +19,10 @@ type Data_Execute struct {
 	DatesLocation map[string][]string `json:"datesLocations"`
 }
 type TempStruct struct {
-    Index []Data_Execute `json:"index"`
+	Index []Data_Execute `json:"index"`
+}
+
+type Execute struct {
+	Loca   []string
+	DataEX []Data_Execute
 }

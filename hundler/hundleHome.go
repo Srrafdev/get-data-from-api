@@ -27,20 +27,35 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 	var dataArtist []box.Data_Execute
 	var api box.Api
-
 	box.SaveURL(&api)
-	fmt.Println(api)
-	
+	// get all data
 	var tempData box.TempStruct
 	box.Decode(&tempData, api.Locations)
-	
+	//box.Decode(&tempData, api.Dates)
+	//box.Decode(&tempData, api.Relation)
+
 	dataArtist = tempData.Index
 	box.Decode(&dataArtist, api.Artists)
-
+	locaAll := box.LenData(dataArtist)
+	////
 	r.ParseForm()
-	DT := box.FilterLocaton(dataArtist,r.FormValue("loca"))
+	loca := r.FormValue("loca")
+	
+	if loca != "" && loca != "all" {
+		DT := box.FilterLocaton(dataArtist, loca)
+		dataArtist = DT
+	}
 
-	if err := tmp.Execute(w, DT); err != nil {
+	min := r.FormValue("mindate")
+	max := r.FormValue("maxdeta")
+	if min != "" && max != "" {
+		DTD := box.FilterEventsByDateRange(dataArtist, min, max)
+		dataArtist = DTD
+	}
+
+	exec := box.Execute{Loca: locaAll, DataEX: dataArtist}
+
+	if err := tmp.Execute(w, exec); err != nil {
 		fmt.Println(err)
 		http.Error(w, "Internal Server 500", http.StatusInternalServerError)
 		return

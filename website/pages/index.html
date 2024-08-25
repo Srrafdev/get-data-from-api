@@ -40,18 +40,23 @@
         children[13].childNodes[1].innerHTML=this.value;" />
       </div>
       
-      <form action="/" method="post">
+      <form action="/" method="get">
       <select name="loca" id="loca">
-        {{range .}}
-          {{range .Locations}}
+        <option selected value="all">all</option>
+          {{range .Loca}}
            <option value="{{.}}">{{.}}</option>
           {{end}}
-        {{end}}
       </select>
+      <br>
+      <label>Min Date</label>
+      <input type="date" name="mindate" required>
+      <label>max Deta</label>
+      <input type="date" name="maxdeta" required>
+      <br>
       <button type="submit" name="submit">Search</button>
-    </form>
+    </form> 
 
-    {{range .}}
+    {{range .DataEX}}
     <form action="/GetMore" method="get">
         <img src="{{.Image}}" alt="Image" width="260" height="260">
         <h2>{{.Name}}</h2>
