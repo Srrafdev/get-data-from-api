@@ -2,11 +2,12 @@ package box
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 )
 
-func FilterLocaton(dataArtist []Data_Execute, loca string) []Data_Execute {
+func FilterByLocaton(dataArtist []Data_Execute, loca string) []Data_Execute {
 	var filter []Data_Execute
 	for _, artist := range dataArtist {
 		for _, valLoca := range artist.Locations {
@@ -36,8 +37,8 @@ func LenData(loca []Data_Execute) []string {
 
 // Function to parse date strings into time.Time objects
 func parseDate(dateStr string) (time.Time, error) {
-	date := convertDate(dateStr)
-	return time.Parse(time.DateOnly, date)
+
+	return time.Parse(time.DateOnly, dateStr) //yy-mm-dd
 }
 
 func convertDate(date string) string {
@@ -47,7 +48,7 @@ func convertDate(date string) string {
 }
 
 // Function to filter events by a date range
-func FilterEventsByDateRange(events []Data_Execute, minDateStr, maxDateStr string) []Data_Execute {
+func FilterByFirstAlbum(events []Data_Execute, minDateStr, maxDateStr string) []Data_Execute {
 	// Parse the min and max date strings
 	minDate, err := parseDate(minDateStr)
 	if err != nil {
@@ -62,18 +63,31 @@ func FilterEventsByDateRange(events []Data_Execute, minDateStr, maxDateStr strin
 	}
 
 	var filteredEvents []Data_Execute
-	for _, event := range events {
-		// Parse the event date string
-		eventDate, err := parseDate(event.FirstAlbum)
+	for _, artis := range events {
+		// Parse the artis date string
+		eventDate, err := parseDate(convertDate(artis.FirstAlbum))
 		if err != nil {
-			fmt.Println("Error parsing event date:", err)
+			fmt.Println("Error parsing artis date:", err)
 			continue
 		}
 
-		// Check if the event date is within the min and max date range
+		// Check if the artis date is within the min and max date range
 		if (eventDate.Equal(minDate) || eventDate.After(minDate)) && (eventDate.Equal(maxDate) || eventDate.Before(maxDate)) {
-			filteredEvents = append(filteredEvents, event)
+			filteredEvents = append(filteredEvents, artis)
 		}
 	}
 	return filteredEvents
+}
+
+func FilterByCreationYear(dataArtists []Data_Execute, min, max string) []Data_Execute {
+	var filter []Data_Execute
+	minI, _ := strconv.Atoi(min)
+	maxI, _ := strconv.Atoi(max)
+	for _, artist := range dataArtists {
+		if artist.CreationDate >= minI && artist.CreationDate <= maxI{
+			filter = append(filter, artist)
+		}
+
+	}
+	return filter
 }

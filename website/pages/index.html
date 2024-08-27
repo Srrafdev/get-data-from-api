@@ -49,10 +49,21 @@
       </select>
       <br>
       <label>Min Date</label>
-      <input type="date" name="mindate" required>
+      <input type="date" name="mindate" value="1973-12-14" required>
       <label>max Deta</label>
-      <input type="date" name="maxdeta" required>
+      <input type="date" name="maxdeta" value="2024-08-27" required>
       <br>
+      <label>Min:</label>
+        <input type="range" id="min" name="minDaCre" min="1958" max="2015" value="1958" 
+          oninput="document.getElementById('max').min = this.value; document.getElementById('minOutput').value = this.value;">
+        <output id="minOutput">1958</output>
+
+      <label>Max:</label>
+        <input type="range" id="max" name="maxDaCre" min="1958" max="2015" value="2015" 
+        oninput="document.getElementById('maxOutput').value = this.value;">
+        <output id="maxOutput">2015</output>
+
+  <br>
       <button type="submit" name="submit">Search</button>
     </form> 
 

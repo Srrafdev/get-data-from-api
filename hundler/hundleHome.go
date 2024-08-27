@@ -38,19 +38,29 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	box.Decode(&dataArtist, api.Artists)
 	locaAll := box.LenData(dataArtist)
 	////
-	r.ParseForm()
+	if rr := r.ParseForm(); rr != nil{
+		http.Error(w, "Error parsing form", http.StatusBadRequest)
+		return
+	}
+// filter locations	
 	loca := r.FormValue("loca")
-	
 	if loca != "" && loca != "all" {
-		DT := box.FilterLocaton(dataArtist, loca)
+		DT := box.FilterByLocaton(dataArtist, loca)
 		dataArtist = DT
 	}
-
-	min := r.FormValue("mindate")
-	max := r.FormValue("maxdeta")
-	if min != "" && max != "" {
-		DTD := box.FilterEventsByDateRange(dataArtist, min, max)
+// filter first album
+	minFL := r.FormValue("mindate")
+	maxFL := r.FormValue("maxdeta")
+	if minFL != "" && maxFL != "" {
+		DTD := box.FilterByFirstAlbum(dataArtist, minFL, maxFL)
 		dataArtist = DTD
+	}
+// filter Creation Date
+	minCD := r.FormValue("minDaCre")
+	maxCD := r.FormValue("maxDaCre")
+	if minCD != "" && maxCD != ""{
+		DTCD := box.FilterByCreationYear(dataArtist, minCD,maxCD)
+		dataArtist = DTCD
 	}
 
 	exec := box.Execute{Loca: locaAll, DataEX: dataArtist}

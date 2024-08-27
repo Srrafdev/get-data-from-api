@@ -4,29 +4,23 @@
 
 ## Structurer of project:
 ```
-|_main.go
+.
+├── go.mod
+├── hundler
+│   ├── hundleGetMore.go
+│   └── hundleHome.go
 |
-|_hundler
-| |_roothandler.go
-| |_posthandler.go
-|  
-|_tracker
-|  |_process.go
-|  |_funcs.go
+├── main.go
+├── README.md
 |
-|_website
-| |_pages
-| | |
-| | |_page1.html
-| | |_page2.html
-| | 
-| |_style
-| | |_style-page1.css
-| | |_style-page2.css
-| |
-| |_img
-|   |_icone.jpg
-|   |_background.jpg
-|
-|_README.md
+├── tracker
+│   ├── ApiStruct.go
+│   ├── filter.go
+│   └── getData.go
+└── website
+    ├── pages
+    │   ├── GetMore.html
+    │   └── index.html
+    └── style
+        └── styles.css
 ```
