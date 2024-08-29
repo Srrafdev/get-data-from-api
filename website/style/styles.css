@@ -1,4 +1,4 @@
-
+/* 
 [slider] {
   position: relative;
   height: 14px;
@@ -172,4 +172,4 @@ div[slider] > input[type=range]::-ms-tooltip {
 
 [slider]:hover > div > [sign] {
   opacity: 1;
-}
+} */

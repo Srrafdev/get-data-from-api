@@ -28,7 +28,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	var dataArtist []box.Data_Execute
 	var api box.Api
 	box.SaveURL(&api)
-	// get all data
+	//
 	var tempData box.TempStruct
 	box.Decode(&tempData, api.Locations)
 	//box.Decode(&tempData, api.Dates)
@@ -37,33 +37,55 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	dataArtist = tempData.Index
 	box.Decode(&dataArtist, api.Artists)
 	locaAll := box.LenData(dataArtist)
+	fmt.Println(locaAll)
 	////
-	if rr := r.ParseForm(); rr != nil{
+	if rr := r.ParseForm(); rr != nil {
 		http.Error(w, "Error parsing form", http.StatusBadRequest)
 		return
 	}
-// filter locations	
+	// filter locations
 	loca := r.FormValue("loca")
 	if loca != "" && loca != "all" {
 		DT := box.FilterByLocaton(dataArtist, loca)
 		dataArtist = DT
 	}
-// filter first album
+	// filter first album
 	minFL := r.FormValue("mindate")
 	maxFL := r.FormValue("maxdeta")
 	if minFL != "" && maxFL != "" {
 		DTD := box.FilterByFirstAlbum(dataArtist, minFL, maxFL)
 		dataArtist = DTD
 	}
-// filter Creation Date
+	// filter Creation Date
 	minCD := r.FormValue("minDaCre")
 	maxCD := r.FormValue("maxDaCre")
-	if minCD != "" && maxCD != ""{
-		DTCD := box.FilterByCreationYear(dataArtist, minCD,maxCD)
+	if minCD != "" && maxCD != "" {
+		DTCD := box.FilterByCreationYear(dataArtist, minCD, maxCD)
 		dataArtist = DTCD
 	}
+	if minCD == ""{
+		minCD = "1958"
+	}
+	if maxCD == ""{
+		maxCD = "2015"
+	}
+	// filter N members
+	members := []string{r.FormValue("m1"), r.FormValue("m2"), r.FormValue("m3"), r.FormValue("m4"), r.FormValue("m5"), r.FormValue("m6"), r.FormValue("m7"), r.FormValue("m8")}
+	DTNM := box.FilterByNMembers(dataArtist, members)
+	if DTNM != nil{
+		dataArtist = DTNM
+	}
 
-	exec := box.Execute{Loca: locaAll, DataEX: dataArtist}
+	exec := box.Execute{
+		LocaAll: locaAll,
+		SelectedLoca: loca,
+		SaveMinDeta: minFL,
+		SaveMaxDeta: maxFL,
+		SaveMinCreat: minCD,
+		SaveMaxCreat: maxCD,
+		SaveNM: members,
+		DataEX: dataArtist,
+	}
 
 	if err := tmp.Execute(w, exec); err != nil {
 		fmt.Println(err)

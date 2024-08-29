@@ -23,6 +23,16 @@ type TempStruct struct {
 }
 
 type Execute struct {
-	Loca   []string
+	LocaAll   []string
+	SelectedLoca string
+	//
+	SaveMinDeta string
+	SaveMaxDeta string
+	//
+	SaveMinCreat string
+	SaveMaxCreat string
+
+	SaveNM []string
+
 	DataEX []Data_Execute
 }
