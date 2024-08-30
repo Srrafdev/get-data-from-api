@@ -8,7 +8,6 @@ import (
 )
 /*Seattle-usa and washington-usa: Seattle is a city in Washington state, both in the USA.
 los_angeles-usa and california-usa: Los Angeles is a city in California, both in the USA.
-new_york-usa and new_york-usa: New York City is a city in New York state, both in the USA.
 san_francisco-usa and california-usa: San Francisco is a city in California, both in the USA.
 houston-usa and texas-usa: Houston is a city in Texas, both in the USA.
 boston-usa and massachusetts-usa: Boston is a city in Massachusetts, both in the USA.
@@ -16,18 +15,33 @@ miami-usa and florida-usa: Miami is a city in Florida, both in the USA.
 chicago-usa and illinois-usa: Chicago is a city in Illinois, both in the USA.
 atlanta-usa and georgia-usa: Atlanta is a city in Georgia, both in the USA.
 seattle-usa and washington-usa: Seattle is a city in Washington state, both in the USA.*/
-func FilterByLocaton(dataArtist []Data_Execute, loca string) []Data_Execute {
+func FilterByLocation(dataArtist []Data_Execute, loca string) []Data_Execute {
 	var filter []Data_Execute
+
+	// Map of cities to their corresponding states
+	cityToState := map[string]string{
+		"seattle-usa":       "washington-usa",
+		"los_angeles-usa":   "california-usa",
+		"san_francisco-usa": "california-usa",
+		"houston-usa":       "texas-usa",
+		"boston-usa":        "massachusetts-usa",
+		"miami-usa":         "florida-usa",
+		"chicago-usa":       "illinois-usa",
+		"atlanta-usa":       "georgia-usa",
+	}
+
 	for _, artist := range dataArtist {
 		for _, valLoca := range artist.Locations {
-			if valLoca == loca {
+			if valLoca == loca || cityToState[valLoca] == loca {
 				filter = append(filter, artist)
+				break // If one location matches, no need to check further
 			}
 		}
-
 	}
+
 	return filter
 }
+
 
 func LenData(loca []Data_Execute) []string {
 	uniqueMap := make(map[string]bool)

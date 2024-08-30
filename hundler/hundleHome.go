@@ -31,13 +31,10 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	//
 	var tempData box.TempStruct
 	box.Decode(&tempData, api.Locations)
-	//box.Decode(&tempData, api.Dates)
-	//box.Decode(&tempData, api.Relation)
 
 	dataArtist = tempData.Index
 	box.Decode(&dataArtist, api.Artists)
 	locaAll := box.LenData(dataArtist)
-	fmt.Println(locaAll)
 	////
 	if rr := r.ParseForm(); rr != nil {
 		http.Error(w, "Error parsing form", http.StatusBadRequest)
@@ -46,7 +43,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	// filter locations
 	loca := r.FormValue("loca")
 	if loca != "" && loca != "all" {
-		DT := box.FilterByLocaton(dataArtist, loca)
+		DT := box.FilterByLocation(dataArtist, loca)
 		dataArtist = DT
 	}
 	// filter first album
