@@ -34,7 +34,7 @@ func FilterByLocation(dataArtist []Data_Execute, loca string) []Data_Execute {
 		for _, valLoca := range artist.Locations {
 			if valLoca == loca || cityToState[valLoca] == loca {
 				filter = append(filter, artist)
-				break // If one location matches, no need to check further
+				break // If no need to check further
 			}
 		}
 	}
@@ -57,6 +57,16 @@ func LenData(loca []Data_Execute) []string {
 	}
 	return filter
 }
+
+func Isnill(s []string)bool{
+	isnil := true
+	for _, val := range s{
+		if val != ""{
+			isnil = false
+		}
+	}
+	return isnil
+} 
 
 // Function to parse date strings into time.Time objects
 func parseDate(dateStr string) (time.Time, error) {

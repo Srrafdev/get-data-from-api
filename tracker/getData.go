@@ -28,7 +28,7 @@ func Decode(mystruct interface{}, url string) error {
 	return nil
 }
 
-func SaveURL(api *Api) {
+func (api *Api)SaveURL() {
 	if err := Decode(&api, URL); err != nil {
 		fmt.Println(err)
 		return
@@ -37,7 +37,8 @@ func SaveURL(api *Api) {
 
 func FillMoreDatae(id string) (*Data_Execute, error) {
 	var api Api
-	SaveURL(&api)
+	api.SaveURL()
+	
 	lis := make([]string, 4)
 	
 	// Populate the slice using a for loop

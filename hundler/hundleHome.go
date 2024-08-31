@@ -2,7 +2,6 @@ package box
 
 import (
 	box "box/tracker"
-	"fmt"
 	"net/http"
 	"text/template"
 )
@@ -27,7 +26,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 	var dataArtist []box.Data_Execute
 	var api box.Api
-	box.SaveURL(&api)
+	api.SaveURL()
 	//
 	var tempData box.TempStruct
 	box.Decode(&tempData, api.Locations)
@@ -60,32 +59,31 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		DTCD := box.FilterByCreationYear(dataArtist, minCD, maxCD)
 		dataArtist = DTCD
 	}
-	if minCD == ""{
+	if minCD == "" {
 		minCD = "1958"
 	}
-	if maxCD == ""{
+	if maxCD == "" {
 		maxCD = "2015"
 	}
 	// filter N members
 	members := []string{r.FormValue("m1"), r.FormValue("m2"), r.FormValue("m3"), r.FormValue("m4"), r.FormValue("m5"), r.FormValue("m6"), r.FormValue("m7"), r.FormValue("m8")}
-	DTNM := box.FilterByNMembers(dataArtist, members)
-	if DTNM != nil{
+	if !box.Isnill(members) {
+		DTNM := box.FilterByNMembers(dataArtist, members)
 		dataArtist = DTNM
 	}
 
 	exec := box.Execute{
-		LocaAll: locaAll,
+		LocaAll:      locaAll,
 		SelectedLoca: loca,
-		SaveMinDeta: minFL,
-		SaveMaxDeta: maxFL,
+		SaveMinDeta:  minFL,
+		SaveMaxDeta:  maxFL,
 		SaveMinCreat: minCD,
 		SaveMaxCreat: maxCD,
-		SaveNM: members,
-		DataEX: dataArtist,
+		SaveNM:       members,
+		DataEX:       dataArtist,
 	}
 
 	if err := tmp.Execute(w, exec); err != nil {
-		fmt.Println(err)
 		http.Error(w, "Internal Server 500", http.StatusInternalServerError)
 		return
 	}
