@@ -35,7 +35,7 @@ func RateLimitMiddleware(next http.HandlerFunc, limiter *SimpleLimiter) http.Han
 	return func(w http.ResponseWriter, r *http.Request) {
 		if !limiter.Allow() {
 			http.Error(w, "Rate limit exceeded", http.StatusTooManyRequests)
-			return
+			return 
 		}
 		next.ServeHTTP(w, r)
 	}

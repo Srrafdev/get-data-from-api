@@ -2,6 +2,8 @@ package box
 
 import (
 	box "box/tracker"
+	"bytes"
+	"log"
 	"net/http"
 	"text/template"
 )
@@ -83,8 +85,11 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		DataEX:       dataArtist,
 	}
 
-	if err := tmp.Execute(w, exec); err != nil {
-		http.Error(w, "Internal Server 500", http.StatusInternalServerError)
+	buf := &bytes.Buffer{}
+	if err := tmp.Execute(buf, exec); err != nil {
+		log.Printf("Template execution error: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
+	w.Write(buf.Bytes())
 }
