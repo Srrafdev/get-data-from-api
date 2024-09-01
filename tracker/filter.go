@@ -70,7 +70,6 @@ func Isnill(s []string)bool{
 
 // Function to parse date strings into time.Time objects
 func parseDate(dateStr string) (time.Time, error) {
-
 	return time.Parse(time.DateOnly, dateStr) //yy-mm-dd
 }
 
