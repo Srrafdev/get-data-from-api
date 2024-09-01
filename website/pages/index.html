@@ -7,62 +7,34 @@
     <title>Groupie Tracker</title>
 </head>
 <body>
-    <!-- <div slider id="slider-distance">
-        <div>
-          <div inverse-left style="width:70%;"></div>
-          <div inverse-right style="width:70%;"></div>
-          <div range style="left:30%;right:40%;"></div>
-          <span thumb style="left:30%;"></span>
-          <span thumb style="left:60%;"></span>
-          <div sign style="left:30%;">
-            <span id="value">30</span>
-          </div>
-          <div sign style="left:60%;">
-            <span id="value">60</span>
-          </div>
-        </div>
-        <input type="range" tabindex="0" value="30" max="100" min="0" step="1" oninput="
-        this.value=Math.min(this.value,this.parentNode.childNodes[5].value-1);
-        var value=(100/(parseInt(this.max)-parseInt(this.min)))*parseInt(this.value)-(100/(parseInt(this.max)-parseInt(this.min)))*parseInt(this.min);
-        var children = this.parentNode.childNodes[1].childNodes;
-        children[1].style.width=value+'%';
-        children[5].style.left=value+'%';
-        children[7].style.left=value+'%';children[11].style.left=value+'%';
-        children[11].childNodes[1].innerHTML=this.value;" />
-      
-        <input type="range" tabindex="0" value="60" max="100" min="0" step="1" oninput="
-        this.value=Math.max(this.value,this.parentNode.childNodes[3].value-(-1));
-        var value=(100/(parseInt(this.max)-parseInt(this.min)))*parseInt(this.value)-(100/(parseInt(this.max)-parseInt(this.min)))*parseInt(this.min);
-        var children = this.parentNode.childNodes[1].childNodes;
-        children[3].style.width=(100-value)+'%';
-        children[5].style.right=(100-value)+'%';
-        children[9].style.left=value+'%';children[13].style.left=value+'%';
-        children[13].childNodes[1].innerHTML=this.value;" />
-      </div> -->
-      
+      <div class="filter">
       <form action="/" method="get">
-      <select name="loca" id="loca">
+
+      <label>locations of concerts</label>
+      <select class="locations_select" name="loca" id="loca">
         <option value="all" {{if eq .SelectedLoca "all"}} selected {{end}}>all</option>
         {{range .LocaAll}}
             <option value="{{.}}" {{if eq $.SelectedLoca .}} selected {{end}}>{{.}}</option>
         {{end}}
       </select>
-      <br>
+     
+      <label>first album date</label>
       <label>Min Date</label>
-      <input type="date" name="mindate" value="{{.SaveMinDeta}}">
+      <input class="min_date" type="date" name="mindate" value="{{.SaveMinDeta}}">
       <label>max Deta</label>
-      <input type="date" name="maxdeta" value="{{.SaveMaxDeta}}">
-      <br>
+      <input class="max_date" type="date" name="maxdeta" value="{{.SaveMaxDeta}}">
+     
+      <label>creation date</label>
       <label>Min:</label>
-        <input type="range" id="min" name="minDaCre" min="1958" max="2015" value="{{.SaveMinCreat}}" 
+        <input class="min_da_cre" type="range" id="min" name="minDaCre" min="1958" max="2015" value="{{.SaveMinCreat}}" 
           oninput="document.getElementById('max').min = this.value; document.getElementById('minOutput').value = this.value;">
-        <output id="minOutput">1958</output>
-
+        <output class="max_da_cre" id="minOutput">1958</output>
       <label>Max:</label>
         <input type="range" id="max" name="maxDaCre" min="1958" max="2015" value="{{.SaveMaxCreat}}" 
         oninput="document.getElementById('maxOutput').value = this.value;">
         <output id="maxOutput">2015</output>
-  <br>
+ 
+  <label>number of members</label>
   <div class="checkboxNM">
     <label>N Members:</label>
     <input type="checkbox" id="checkbox1" name="m1" value="1" {{if eq (index .SaveNM 0) "1"}} checked {{end}}>
@@ -81,22 +53,26 @@
     <label for="7">7</label>
     <input type="checkbox" id="8" name="m8" value="8" {{if eq (index .SaveNM 7) "8"}} checked {{end}}>
     <label for="8">8</label>
-</div>
-<br>
-      <button type="submit" name="submit">Search</button>
+  </div>
+      <button type="submit" name="submit" class="Search_buttun">Search</button>
     </form> 
+  </div>
+    <div class="cards">
   {{if .DataEX}}
     {{range .DataEX}}
     <form action="/GetMore" method="get">
-        <img src="{{.Image}}" alt="Image" width="260" height="260">
+      <div class="card">
+        <img src="{{.Image}}" alt="Image" class="image_card">
         <h2>{{.Name}}</h2>
         <p><strong>Creation Year:</strong> {{.CreationDate}}</p>
         <p><strong>First Album:</strong> {{.FirstAlbum}}</p>
-        <button type="submit" value="{{.Id}}" name="submit">go more</button>
+        <button type="submit" value="{{.Id}}" name="submit" class="go_more_buttun">go more</button>
+      </div>
     </form>
     {{end}}
    {{else}}
     <h2>Not Found</h2>
     {{end}}
+</div>
 </body>
 </html>

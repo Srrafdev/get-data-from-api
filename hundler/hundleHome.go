@@ -1,11 +1,11 @@
 package box
 
 import (
-	box "box/tracker"
 	"bytes"
-	"log"
 	"net/http"
 	"text/template"
+
+	box "box/tracker"
 )
 
 // hundle err in home page
@@ -87,7 +87,6 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 	buf := &bytes.Buffer{}
 	if err := tmp.Execute(buf, exec); err != nil {
-		log.Printf("Template execution error: %v", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
