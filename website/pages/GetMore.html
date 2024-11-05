@@ -7,28 +7,33 @@
     <title>Get More</title>
 </head>
 <body>
-   <div>
+	{{if .Error}}
+	<div class="error">
+		<h1 >{{.Error}}</h1>
+	</div>
+	{{else}}
+	<div class="info"> 
 		<img src="{{.Image}}" alt="{{.Name}}" />
-		<h1>Artist</h1>
+		<h1 class="h1title">Artist</h1>
 		<p><strong>Name:</strong> {{.Name}}</p>
 		<p><strong>Members:</strong> {{range .Members}}{{.}}, {{end}}</p>
 		<p><strong>Creation Date:</strong> {{.CreationDate}}</p>
 		<p><strong>First Album:</strong> {{.FirstAlbum}}</p>
 
-		<h1>Location</h1>
+		<h1 class="h1title">Location</h1>
 		<ul>
 			{{range .Locations}}
 			<li>{{.}}</li>
 			{{end}}
 		</ul>
-		<h1>Date</h1>
+		<h1 class="h1title">Date</h1>
 		<ul>
 			{{range .Dates}}
 			<li>{{.}}</li>
 			{{end}}
 		</ul>
 
-		<h1>Relation</h1>
+		<h1 class="h1title">Relation</h1>
 		<p><strong>Dates Locations:</strong></p>
 		<ul>
 			{{range $key, $value := .DatesLocation}}
@@ -43,5 +48,6 @@
 			{{end}}
 		</ul>
 	</div>
+	{{end}}
 </body>
 </html>

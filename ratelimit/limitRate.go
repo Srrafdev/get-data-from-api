@@ -11,6 +11,7 @@ type SimpleLimiter struct {
 	lastRequest time.Time
 	minInterval time.Duration
 }
+
 // time bitwen 
 func NewLimiter(requestsPerSecond int) *SimpleLimiter {
 	return &SimpleLimiter{

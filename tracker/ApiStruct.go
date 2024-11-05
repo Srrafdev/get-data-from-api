@@ -8,6 +8,7 @@ type Api struct {
 }
 
 type Data_Execute struct {
+	Error         string
 	Id            int                 `json:"id"`
 	Image         string              `json:"image"`
 	Name          string              `json:"name"`
@@ -23,7 +24,9 @@ type TempStruct struct {
 }
 
 type Execute struct {
-	LocaAll   []string
+	Error string
+	//
+	LocaAll      []string
 	SelectedLoca string
 	//
 	SaveMinDeta string

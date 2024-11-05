@@ -1,36 +1,58 @@
 package box
 
 import (
-	box "box/tracker"
 	"net/http"
 	"text/template"
+
+	box "box/tracker"
 )
 
 func GetMore(w http.ResponseWriter, r *http.Request) {
+	tmp, errT := template.ParseFiles("./website/pages/GetMore.html")
+
 	if r.URL.Path != "/GetMore" {
-		http.Error(w, "Not Found 404", http.StatusNotFound)
+		w.WriteHeader(http.StatusNotFound)
+		data := box.Execute{
+			Error: "Not Found 404",
+		}
+		tmp.Execute(w, data)
 		return
 	}
 
 	if r.Method != "GET" {
-		http.Error(w, "Method Not Allowed 405", http.StatusMethodNotAllowed)
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		data := box.Execute{
+			Error: "Method Not Allowed 405",
+		}
+		tmp.Execute(w, data)
 		return
 	}
 
-	tmp, errT := template.ParseFiles("./website/pages/GetMore.html")
 	if errT != nil {
-		http.Error(w, "Internal Server 500", http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		data := box.Execute{
+			Error: "Internal Server Error 500",
+		}
+		tmp.Execute(w, data)
 		return
 	}
 	r.ParseForm()
 	id := r.FormValue("submit")
 	data, errS := box.FillMoreDatae(id)
 	if errS != nil {
-		http.Error(w, "Bad request 400", http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		data := box.Execute{
+			Error: "Bad request 400",
+		}
+		tmp.Execute(w, data)
 		return
 	}
 	if err := tmp.Execute(w, &data); err != nil {
-		http.Error(w, "Internal Server 500", http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		data := box.Execute{
+			Error: "Internal Server Error 500",
+		}
+		tmp.Execute(w, data)
 		return
 	}
 }

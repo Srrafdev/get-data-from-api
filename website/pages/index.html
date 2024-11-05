@@ -7,57 +7,101 @@
     <title>Groupie Tracker</title>
 </head>
 <body>
-      <div class="filter">
-      <form action="/" method="get">
+  {{if .Error}}
+  <div class="error">
+      <h1>{{.Error}}</h1>
+  </div>
+  {{else}}
+  <script>
+     document.getElementById("submit").addEventListener('click', async () => {
+        let email = document.getElementById("emailL").value
+        let password = document.getElementById("passwordL").value
+        
+        let response = await fetch('/api/log-in', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ emailname: email, password: password })
+        })
+        let data = await response.json()
+        document.getElementById('result').innerHTML = "<p>" + JSON.stringify(data) + "</p>";
+    })
 
-      <label>locations of concerts</label>
-      <select class="locations_select" name="loca" id="loca">
-        <option value="all" {{if eq .SelectedLoca "all"}} selected {{end}}>all</option>
-        {{range .LocaAll}}
-            <option value="{{.}}" {{if eq $.SelectedLoca .}} selected {{end}}>{{.}}</option>
-        {{end}}
-      </select>
-     
-      <label>first album date</label>
-      <label>Min Date</label>
-      <input class="min_date" type="date" name="mindate" value="{{.SaveMinDeta}}">
-      <label>max Deta</label>
-      <input class="max_date" type="date" name="maxdeta" value="{{.SaveMaxDeta}}">
-     
-      <label>creation date</label>
-      <label>Min:</label>
-        <input class="min_da_cre" type="range" id="min" name="minDaCre" min="1958" max="2015" value="{{.SaveMinCreat}}" 
-          oninput="document.getElementById('max').min = this.value; document.getElementById('minOutput').value = this.value;">
-        <output class="max_da_cre" id="minOutput">1958</output>
-      <label>Max:</label>
-        <input type="range" id="max" name="maxDaCre" min="1958" max="2015" value="{{.SaveMaxCreat}}" 
-        oninput="document.getElementById('maxOutput').value = this.value;">
-        <output id="maxOutput">2015</output>
+    function toggleSidebar(){
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar) {
+          sidebar.classList.toggle('show');
+      } else {
+          console.error('Sidebar element not found');
+      }
+    }
+  </script>
+
+<nav>
+
+  <div class="search-container">
+    <form action="/">
+      <input type="text" placeholder="Search.." name="search">
+      <button type="submit">Search</button>
+    </form>
+  </div>
+
+  <button class="showsidebar" onclick="toggleSidebar()">Show Filter</button>
+</nav>
+
+<aside id="sidebar">  <div class="filter">
+  <form action="/" method="get">
+
+  <label>locations of concerts</label>
+  <select class="locations_select" name="loca" id="loca">
+    <option value="all" {{if eq .SelectedLoca "all"}} selected {{end}}>all</option>
+    {{range .LocaAll}}
+        <option value="{{.}}" {{if eq $.SelectedLoca .}} selected {{end}}>{{.}}</option>
+    {{end}}
+  </select>
  
-  <label>number of members</label>
-  <div class="checkboxNM">
-    <label>N Members:</label>
-    <input type="checkbox" id="checkbox1" name="m1" value="1" {{if eq (index .SaveNM 0) "1"}} checked {{end}}>
-    <label for="1">1</label>
-    <input type="checkbox" id="2" name="m2" value="2" {{if eq (index .SaveNM 1) "2"}} checked {{end}}>
-    <label for="2">2</label>
-    <input type="checkbox" id="3" name="m3" value="3" {{if eq (index .SaveNM 2) "3"}} checked {{end}}>
-    <label for="3">3</label>
-    <input type="checkbox" id="4" name="m4" value="4" {{if eq (index .SaveNM 3) "4"}} checked {{end}}>
-    <label for="4">4</label>
-    <input type="checkbox" id="5" name="m5" value="5" {{if eq (index .SaveNM 4) "5"}} checked {{end}}>
-    <label for="5">5</label>
-    <input type="checkbox" id="6" name="m6" value="6" {{if eq (index .SaveNM 5) "6"}} checked {{end}}>
-    <label for="6">6</label>
-    <input type="checkbox" id="7" name="m7" value="7" {{if eq (index .SaveNM 6) "7"}} checked {{end}}>
-    <label for="7">7</label>
-    <input type="checkbox" id="8" name="m8" value="8" {{if eq (index .SaveNM 7) "8"}} checked {{end}}>
-    <label for="8">8</label>
-  </div>
-      <button type="submit" name="submit" class="Search_buttun">Search</button>
-    </form> 
-  </div>
-    <div class="cards">
+  <label>first album date</label>
+  <label>Min Date</label>
+  <input class="min_date" type="date" name="mindate" value="{{.SaveMinDeta}}">
+  <label>max Deta</label>
+  <input class="max_date" type="date" name="maxdeta" value="{{.SaveMaxDeta}}">
+ 
+  <label>creation date</label>
+  <label>Min:</label>
+    <input class="min_da_cre" type="range" id="min" name="minDaCre" min="1958" max="2015" value="{{.SaveMinCreat}}" 
+      oninput="document.getElementById('max').min = this.value; document.getElementById('minOutput').value = this.value;">
+    <output class="max_da_cre" id="minOutput">1958</output>
+  <label>Max:</label>
+    <input type="range" id="max" name="maxDaCre" min="1958" max="2015" value="{{.SaveMaxCreat}}" 
+    oninput="document.getElementById('maxOutput').value = this.value;">
+    <output id="maxOutput">2015</output>
+
+<label>number of members</label>
+<div class="checkboxNM">
+<label>N Members:</label>
+<input type="checkbox" id="checkbox1" name="m1" value="1" {{if eq (index .SaveNM 0) "1"}} checked {{end}}>
+<label for="1">1</label>
+<input type="checkbox" id="2" name="m2" value="2" {{if eq (index .SaveNM 1) "2"}} checked {{end}}>
+<label for="2">2</label>
+<input type="checkbox" id="3" name="m3" value="3" {{if eq (index .SaveNM 2) "3"}} checked {{end}}>
+<label for="3">3</label>
+<input type="checkbox" id="4" name="m4" value="4" {{if eq (index .SaveNM 3) "4"}} checked {{end}}>
+<label for="4">4</label>
+<input type="checkbox" id="5" name="m5" value="5" {{if eq (index .SaveNM 4) "5"}} checked {{end}}>
+<label for="5">5</label>
+<input type="checkbox" id="6" name="m6" value="6" {{if eq (index .SaveNM 5) "6"}} checked {{end}}>
+<label for="6">6</label>
+<input type="checkbox" id="7" name="m7" value="7" {{if eq (index .SaveNM 6) "7"}} checked {{end}}>
+<label for="7">7</label>
+<input type="checkbox" id="8" name="m8" value="8" {{if eq (index .SaveNM 7) "8"}} checked {{end}}>
+<label for="8">8</label>
+</div>
+  <button type="submit" name="submit" class="Search_buttun">Search</button>
+</form> 
+</div></aside>
+
+<main> <div class="cards">
   {{if .DataEX}}
     {{range .DataEX}}
     <form action="/GetMore" method="get">
@@ -71,8 +115,10 @@
     </form>
     {{end}}
    {{else}}
-    <h2>Not Found</h2>
+    <h2 class="notFound">Not Found</h2>
     {{end}}
 </div>
+</main>
+  {{end}}
 </body>
 </html>

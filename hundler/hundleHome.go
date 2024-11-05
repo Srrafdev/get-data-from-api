@@ -10,19 +10,32 @@ import (
 
 // hundle err in home page
 func Home(w http.ResponseWriter, r *http.Request) {
+	tmp, err := template.ParseFiles("./website/pages/index.html")
+
 	if r.URL.Path != "/" {
-		http.Error(w, "Not Found 404", http.StatusNotFound)
+		w.WriteHeader(http.StatusNotFound)
+		data := box.Execute{
+			Error: "Not Found 404",
+		}
+		tmp.Execute(w, data)
 		return
 	}
 
 	if r.Method != "GET" {
-		http.Error(w, "Method Not Allowed 405", http.StatusMethodNotAllowed)
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		data := box.Execute{
+			Error: "Method Not Allowed 405",
+		}
+		tmp.Execute(w, data)
 		return
 	}
 
-	tmp, err := template.ParseFiles("./website/pages/index.html")
 	if err != nil {
-		http.Error(w, "Internal Server 500", http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		data := box.Execute{
+			Error: "Internal Server Error 500",
+		}
+		tmp.Execute(w, data)
 		return
 	}
 
@@ -36,9 +49,14 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	dataArtist = tempData.Index
 	box.Decode(&dataArtist, api.Artists)
 	locaAll := box.LenData(dataArtist)
+	box.ArtistSuggest = dataArtist
 	////
 	if rr := r.ParseForm(); rr != nil {
-		http.Error(w, "Error parsing form", http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		data := box.Execute{
+			Error: "Error parsing form 400",
+		}
+		tmp.Execute(w, data)
 		return
 	}
 	// filter locations
@@ -74,6 +92,13 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		dataArtist = DTNM
 	}
 
+	// serach by name
+	target := r.FormValue("search")
+	if target != "" {
+		DTSE := box.Search(dataArtist, target)
+		dataArtist = DTSE
+	}
+
 	exec := box.Execute{
 		LocaAll:      locaAll,
 		SelectedLoca: loca,
@@ -85,9 +110,15 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		DataEX:       dataArtist,
 	}
 
+	box.SuggestionSearchAPI("Japan")
+
 	buf := &bytes.Buffer{}
 	if err := tmp.Execute(buf, exec); err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		data := box.Execute{
+			Error: "Internal Server Error 500",
+		}
+		tmp.Execute(w, data)
 		return
 	}
 	w.Write(buf.Bytes())
