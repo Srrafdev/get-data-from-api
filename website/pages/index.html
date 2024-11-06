@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/style/stylesIndex.css"/> 
+    <link rel="stylesheet" type="text/css" href="/public/style/stylesIndex.css"/> 
     <title>Groupie Tracker</title>
 </head>
 <body>
@@ -12,12 +12,12 @@
       <h1>{{.Error}}</h1>
   </div>
   {{else}}
-  <div class="suggs" id="suggs"></div>
 <nav>
   <div class="search-container">
-    <form action="/">
-      <input id="inpSrsh" type="text" placeholder="Search.." name="search">
+    <form class="formSearch" action="/">
+      <input autocomplete="off" id="inpSrsh" type="text" placeholder="Search.." name="search">
       <button  type="submit">Search</button>
+      <div class="suggs" id="suggs"></div>
     </form>
   </div>
 
@@ -94,62 +94,7 @@
 </div>
 </main>
 
-<script>
-  const searchValue = document.getElementById("inpSrsh");
-  const suggs = document.getElementById("suggs");
-  
-  searchValue.addEventListener("input", async () => {
-    let response = await fetch('/api/search', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({target:searchValue.value})
-        })
-        let data = await response.json()
-        if (data === "" || searchValue.value === "" ){
-          suggs.innerHTML = ""
-          return
-        }
-
-        let ineer = "";
-        if(data.name){
-          for(let val of data.name){
-            ineer += `<p>Artist: ${val}</p>`
-          }
-        }
-        if(data.locations){
-          for(let val of data.locations){
-            ineer += `<p>Location: ${val}</p>`
-          }
-        }
-        if(data.member){
-          for(let val of data.member){
-            ineer += `<p>member: ${val}</p>`
-          }
-        }
-        if(data.first_album){
-          for(let val of data.first_album){
-            ineer += `<p>first_album: ${val}</p>`
-          }
-        }
-        if(data.creation_date){
-          for(let val of data.creation_date){
-            ineer += `<p>creation_date: ${val}</p>`
-          }
-        }
-        suggs.innerHTML = ineer
-  })
-
-  function toggleSidebar(){
-    const sidebar = document.getElementById('sidebar');
-    if (sidebar) {
-        sidebar.classList.toggle('show');
-    } else {
-        console.error('Sidebar element not found');
-    }
-  }
-</script>
+<script src="/public/js/script.js"></script>
   {{end}}
 </body>
 </html>

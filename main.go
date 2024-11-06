@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-	cssDir := http.FileServer(http.Dir("./website/style"))
-	http.Handle("/style/", http.StripPrefix("/style/", cssDir))
+	cssDir := http.FileServer(http.Dir("./website"))
+	http.Handle("/public/", http.StripPrefix("/public/", cssDir))
 
 	limiter := limit.NewLimiter(2)
 	http.HandleFunc("/", limit.RateLimitMiddleware(box.Home, limiter))
