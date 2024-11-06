@@ -3,6 +3,7 @@ package box
 import (
 	box "box/tracker"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -24,8 +25,18 @@ type target struct {
 func SuggestionSearchAPI(res http.ResponseWriter, req *http.Request) {
 	var suggestions Suggest
 	var target target
+	res.Header().Set("Content-Type", "application/json")
 
-	json.NewDecoder(req.Body).Decode(&target)
+	err := json.NewDecoder(req.Body).Decode(&target)
+	if err != nil{
+		fmt.Println("ERROR DECODE :", err)
+		return
+	}
+	if target.Text == ""{
+		res.WriteHeader(http.StatusOK)
+		json.NewEncoder(res).Encode("")
+		return
+	}
 
 	lowerTarget := strings.ToLower(target.Text)
 
@@ -54,7 +65,7 @@ func SuggestionSearchAPI(res http.ResponseWriter, req *http.Request) {
 			suggestions.CreationDate = append(suggestions.CreationDate, artist.CreationDate)
 		}
 	}
-	res.Header().Set("Content-Type", "application/json")
+	
 	res.WriteHeader(http.StatusOK)
 	json.NewEncoder(res).Encode(suggestions)
 }

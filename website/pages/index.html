@@ -12,14 +12,13 @@
       <h1>{{.Error}}</h1>
   </div>
   {{else}}
+  <div class="suggs" id="suggs"></div>
 <nav>
-
   <div class="search-container">
     <form action="/">
       <input id="inpSrsh" type="text" placeholder="Search.." name="search">
       <button  type="submit">Search</button>
     </form>
-    <div id="suggs"></div>
   </div>
 
   <button class="showsidebar" onclick="toggleSidebar()">Show Filter</button>
@@ -108,13 +107,38 @@
             body: JSON.stringify({target:searchValue.value})
         })
         let data = await response.json()
-        console.log(data);
-        
-        suggs.innerHTML = `<p>${data.name}</p>
-                           <p>${data.locations}</p>
-                           <p>${data.member}</p>
-                           <p>${data.first_album}</p>
-                           <p>${data.creation_date}</p>`
+        if (data === "" || searchValue.value === "" ){
+          suggs.innerHTML = ""
+          return
+        }
+
+        let ineer = "";
+        if(data.name){
+          for(let val of data.name){
+            ineer += `<p>Artist: ${val}</p>`
+          }
+        }
+        if(data.locations){
+          for(let val of data.locations){
+            ineer += `<p>Location: ${val}</p>`
+          }
+        }
+        if(data.member){
+          for(let val of data.member){
+            ineer += `<p>member: ${val}</p>`
+          }
+        }
+        if(data.first_album){
+          for(let val of data.first_album){
+            ineer += `<p>first_album: ${val}</p>`
+          }
+        }
+        if(data.creation_date){
+          for(let val of data.creation_date){
+            ineer += `<p>creation_date: ${val}</p>`
+          }
+        }
+        suggs.innerHTML = ineer
   })
 
   function toggleSidebar(){
