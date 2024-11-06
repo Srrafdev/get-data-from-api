@@ -12,38 +12,12 @@
       <h1>{{.Error}}</h1>
   </div>
   {{else}}
-  <script>
-     document.getElementById("submit").addEventListener('click', async () => {
-        let email = document.getElementById("emailL").value
-        let password = document.getElementById("passwordL").value
-        
-        let response = await fetch('/api/log-in', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ emailname: email, password: password })
-        })
-        let data = await response.json()
-        document.getElementById('result').innerHTML = "<p>" + JSON.stringify(data) + "</p>";
-    })
-
-    function toggleSidebar(){
-      const sidebar = document.getElementById('sidebar');
-      if (sidebar) {
-          sidebar.classList.toggle('show');
-      } else {
-          console.error('Sidebar element not found');
-      }
-    }
-  </script>
-
 <nav>
 
   <div class="search-container">
     <form action="/">
-      <input type="text" placeholder="Search.." name="search">
-      <button type="submit">Search</button>
+      <input id="inpSrsh" type="text" placeholder="Search.." name="search">
+      <button  type="submit">Search</button>
     </form>
   </div>
 
@@ -119,6 +93,32 @@
     {{end}}
 </div>
 </main>
+
+<script>
+  const searchValue = document.getElementById("inpSrsh");
+  
+  searchValue.addEventListener("input", async () => {
+    let response = await fetch('/api/search', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({target:searchValue.value})
+        })
+        let data = await response.json()
+        console.log(data);
+        
+  })
+
+  function toggleSidebar(){
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) {
+        sidebar.classList.toggle('show');
+    } else {
+        console.error('Sidebar element not found');
+    }
+  }
+</script>
   {{end}}
 </body>
 </html>

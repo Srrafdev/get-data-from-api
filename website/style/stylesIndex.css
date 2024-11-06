@@ -10,8 +10,7 @@ body{
   grid-template-rows: auto 1fr auto;
   grid-template-areas: 
   "navbar navbar"
-  "sidebar main"
-  "sidebar footer";
+  "sidebar main";
 }
 
 nav{
@@ -190,7 +189,7 @@ select, input[type="date"], input[type="range"] {
 }
 
 
-/******************** search bar   ***********************/
+******************* search bar   **********************
 .search-container {
   max-width: 500px;
   margin: 20px auto;

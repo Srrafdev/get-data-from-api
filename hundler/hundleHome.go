@@ -49,7 +49,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	dataArtist = tempData.Index
 	box.Decode(&dataArtist, api.Artists)
 	locaAll := box.LenData(dataArtist)
-	box.ArtistSuggest = dataArtist
+	ArtistSuggest = dataArtist
 	////
 	if rr := r.ParseForm(); rr != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -110,7 +110,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		DataEX:       dataArtist,
 	}
 
-	box.SuggestionSearchAPI("Japan")
+	//box.SuggestionSearchAPI("Japan")
 
 	buf := &bytes.Buffer{}
 	if err := tmp.Execute(buf, exec); err != nil {
