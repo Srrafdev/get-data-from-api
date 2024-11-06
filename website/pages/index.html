@@ -19,6 +19,7 @@
       <input id="inpSrsh" type="text" placeholder="Search.." name="search">
       <button  type="submit">Search</button>
     </form>
+    <div id="suggs"></div>
   </div>
 
   <button class="showsidebar" onclick="toggleSidebar()">Show Filter</button>
@@ -96,6 +97,7 @@
 
 <script>
   const searchValue = document.getElementById("inpSrsh");
+  const suggs = document.getElementById("suggs");
   
   searchValue.addEventListener("input", async () => {
     let response = await fetch('/api/search', {
@@ -108,6 +110,11 @@
         let data = await response.json()
         console.log(data);
         
+        suggs.innerHTML = `<p>${data.name}</p>
+                           <p>${data.locations}</p>
+                           <p>${data.member}</p>
+                           <p>${data.first_album}</p>
+                           <p>${data.creation_date}</p>`
   })
 
   function toggleSidebar(){
