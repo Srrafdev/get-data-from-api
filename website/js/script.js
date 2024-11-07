@@ -20,6 +20,8 @@ searchValue.addEventListener("input", async () => {
       console.log(data);
       
       let ineer = "";
+      console.log(data);
+      
       if(data.name){
         for(let val of data.name){
           let idVal = val.split("++")
